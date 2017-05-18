@@ -1,0 +1,56 @@
+
+
+    {% extends "layout.html" %}
+    {% block content %}
+    <div class="well well-sm">
+              <form class="form-horizontal" action="/process" method="post">
+                {% csrf_token %}
+              <fieldset>
+                <legend class="text-center">Add A New Book</legend>
+
+                <!-- Name input-->
+                <div class="form-group">
+                  <label class="col-md-3 control-label" for="title">Title</label>
+                  <div class="col-md-9">
+                    <input id="name" name="title" type="text" placeholder="Book Title" class="form-control">
+                  </div>
+                </div>
+
+                <!-- Email input-->
+                <div class="form-group">
+                  <label class="col-md-3 control-label" for="author">Book Author</label>
+                  <div class="col-md-9">
+                    <input id="email" name="author" type="text" placeholder="Your email" class="form-control">
+                  </div>
+                </div>
+
+                <!-- Message body -->
+                <div class="form-group">
+                  <label class="col-md-3 control-label" for="review">Your Review</label>
+                  <div class="col-md-9">
+                    <textarea class="form-control" id="review" name="review" placeholder="Please enter your message here..." rows="5"></textarea>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-md-3 control-label" for="review">Rating</label>
+                  <div class="col-md-9">
+                    <select name="rating">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Form actions -->
+                <div class="form-group">
+                  <div class="col-md-12 text-right">
+                    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                  </div>
+                </div>
+              </fieldset>
+              </form>
+                {% endblock content %}

@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="page-header">
+  <h1>This Is The Users Page<small></small></h1>
+</div>
+<br>
+<div class="User">
+  <div class="card-block px-3">
+   <p class="card-text"><h3>Name: {{user.first_name}}</h3></p>
+   <p class="card-text"><h3>Username: {{user.user_name}}</h3></p>
+   <p class="card-text"><h3>Email: {{user.email}}</h3></p>
+   <p class="card-text"><h3>Total Reviews: {{revcount}}</h3></p>
+   <p class="card-text"></p>
+ </div>
+ <br>
+  <h3>Other Books Reviewed by {{user.first_name}}:</h3>
+  {% for m in mybooks %}
+  <li><a href='/book/{{m.book.id}}'>{{m.book.title}}</a></li>
+  {%endfor%}
+</div>
+{% endblock content %}

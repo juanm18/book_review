@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-3">Hello, Welcome {{request.session.username}}</h1>
+    <p class="lead">Book Reviews</p>
+  </div>
+</div>
+<form class="navbar-form navbar-left" method="get" action="" accept-charset="utf-8">
+  <div class="form-group">
+    <input type="text" class="form-control" name="q" placeholder="Search" value="{{request.GET.q}}">
+  </div>
+  <button type="submit" class="btn btn-success">Search</button>
+</form>
+<div class="search_result">
+  {% if search_result.length == 0 %}
+    <h5>No Results Found</h5>
+  {%endif%}
+    {% for obj in search_result %}
+    {% if request.GET.q %}
+    <h2>Search Results:</h2>
+    <li><a href="/book/{{obj.id}}">{{obj.title}}</a></li>
+    {% endif %}
+    {%endfor%}
+</div>
+<div id='bookrev'>
+  <h3>Recent Book Reviews:</h3>
+  <hr>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <!-- Fluid width widget -->
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <ul class="media-list">
+              <li class="media">
+                <div class="media-body">
+                  <h4 class="media-heading">
+                    {% for r in recent %}
+                    {% if recent.length == 0 %}
+                    <h3>No recent Books with Reviews</h3>
+                    {%endif%}
+                    <h5><a href='/user/{{r.user.id}}'> {{r.user.user_name}}</a></h5>
+                    <h6>
+                      commented on <a href="/book/{{r.book.id}}">{{r.book.title}}</a>
+                    </h6>
+                  </h4>
+                  <h5>
+                    {{r.comment}}
+                  </h5>
+                  <p>Rating: {{r.rating}} Stars</p>
+                  <p>Posted on: {{r.created_at}}</p>
+                  <p>{% if r.user.id == request.session.id %} <a href='delete/{{r.book.id}}'>Delete Book</a>{%endif%}</p>
+                  {% endfor %}
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- End fluid width widget -->
+      </div>
+    </div>
+  </div>
+  <hr>
+</div>
+<div id='bookrev'>
+  <h3>There are Currently  {{count}} Books with Reviews:</h3>
+  <table>
+    <thead>
+      <th>Book Title</th>
+    </thead>
+    {% for Book in allbooks %}
+    <tbody>
+      <td>
+        <a href='/book/{{Book.id}}'>{{Book.title}}</a>
+      </td>
+    </tbody>
+    {%endfor%}
+  </table>
+  <br>
+</div>
+<a href='/add'><button class="btn btn-primary" type="button" name="button">Add New Book</button></a>
+{%endblock content%}
