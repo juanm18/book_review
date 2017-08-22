@@ -45,15 +45,11 @@ def Login(request):
         return redirect('Books:index')
 
 def home(request):
-
     person_In = User.objects.get(user_name=request.session['username'])
-
     recent = Comment.objects.order_by("-created_at")[0:3]
     allbooks = Book.objects.all()
     count = Book.objects.count()
     Book.objects.order_by('created_at')
-
-
     search_result = Book.objects.all()
     query = request.GET.get("q")
 
@@ -89,17 +85,13 @@ def proccess(request):
 
 def user(request,id):
     person_In = User.objects.get(user_name=request.session['username'])
-
     user = User.objects.get(pk=id)
     revcount = Comment.objects.filter(user_id=id).count()
     books = Comment.objects.filter(user_id=id).values_list('book',flat=True).distinct()
     mybooks = []
-    index = 0
-    print books
     for b in books:
         book = Book.objects.get(pk=b)
         mybooks.append(book)
-    print mybooks
     return render(request, "user.html",{'user':user, 'revcount':revcount, 'mybooks':mybooks, 'person_In':person_In})
 
 def book_info(request,id):
