@@ -1,9 +1,7 @@
-
-
     {% extends "layout.html" %}
     {% block content %}
     <div class="well well-sm">
-              <form class="form-horizontal" action="/process" method="post">
+              <form class="form-horizontal" action="/proccess" method="post">
                 {% csrf_token %}
               <fieldset>
                 <legend class="text-center">Add A New Book</legend>
@@ -20,7 +18,7 @@
                 <div class="form-group">
                   <label class="col-md-3 control-label" for="author">Book Author</label>
                   <div class="col-md-9">
-                    <input id="email" name="author" type="text" placeholder="Your email" class="form-control">
+                    <input id="email" name="author" type="text" placeholder="Author" class="form-control">
                   </div>
                 </div>
 

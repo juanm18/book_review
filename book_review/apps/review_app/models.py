@@ -9,7 +9,7 @@ from django.db import IntegrityError
 email_regex = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 # Create your models here.
 class UserManager(models.Manager):
-    def user_validation(self,name,username, email,password,confirm):
+    def user_validation(self,name,username,email,password,confirm):
         errors = []
         if len(name)<2:
             errors.append("Name must contain more than 2 characters")

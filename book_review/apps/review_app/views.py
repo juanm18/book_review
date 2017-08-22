@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.contrib import messages
 from django.db.models import Avg
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.exceptions import ObjectDoesNotExist
 
 
 
@@ -44,28 +45,31 @@ def Login(request):
         return redirect('Books:index')
 
 def home(request):
+
+    person_In = User.objects.get(user_name=request.session['username'])
+
     recent = Comment.objects.order_by("-created_at")[0:3]
     allbooks = Book.objects.all()
     count = Book.objects.count()
     Book.objects.order_by('created_at')
 
+
     search_result = Book.objects.all()
     query = request.GET.get("q")
+
     if query:
-        search_result = search_result.filter(
-        Q(title__icontains=query)|
-        Q(author__icontains=query)
-        ).distinct()
+        if search_result.filter(Q(title__icontains=query)|Q(author__icontains=query)).exists() == False:
+            search_result = None
+        else:
+            search_result = search_result.filter(
+            Q(title__icontains=query)|
+            Q(author__icontains=query)
+            ).distinct()
+
     paginator = Paginator(search_result,2)
     page_request_var = "page"
     page = request.GET.get(page_request_var)
-    try:
-        queryset = paginator.page(page)
-    except PageNotAnInteger:
-        queryset = paginator.page(1)
-    except EmptyPage:
-        queryset = paginator.page(paginator.num_pages)
-    return render(request, "home.html", {'recent':recent, 'allbooks':allbooks, 'count':count, 'search_result':search_result, 'page_request_var': page_request_var})
+    return render(request, "home.html", {'recent':recent, 'allbooks':allbooks, 'count':count, 'search_result':search_result, 'page_request_var': page_request_var, 'person_In':person_In})
 
 def add(request):
     return render(request, "addbook.html")
@@ -73,7 +77,7 @@ def add(request):
 def proccess(request):
     title = request.POST['title']
     author = request.POST['author']
-    comment = request.POST['reviews']
+    comment = request.POST['review']
     rating = request.POST['rating']
     user = User.objects.get(id=request.session['id'])
     errors = []
@@ -84,17 +88,26 @@ def proccess(request):
     return redirect('Books:home')
 
 def user(request,id):
+    person_In = User.objects.get(user_name=request.session['username'])
+
     user = User.objects.get(pk=id)
     revcount = Comment.objects.filter(user_id=id).count()
-    mybooks = Comment.objects.filter(user_id=id)
-    return render(request, "user.html",{'user':user, 'revcount':revcount, 'mybooks':mybooks})
+    books = Comment.objects.filter(user_id=id).values_list('book',flat=True).distinct()
+    mybooks = []
+    index = 0
+    print books
+    for b in books:
+        book = Book.objects.get(pk=b)
+        mybooks.append(book)
+    print mybooks
+    return render(request, "user.html",{'user':user, 'revcount':revcount, 'mybooks':mybooks, 'person_In':person_In})
 
 def book_info(request,id):
-    user = User.objects.get(id=request.session['id'])
+    person_In = User.objects.get(id=request.session['id'])
     book = Book.objects.get(pk=id)
     comments = Comment.objects.filter(book=book)
     # average = Comment.objects.find(book=book).rating.sum()/rating.count()
-    return render(request,"book_info.html",{'book':book,'comments':comments})
+    return render(request,"book_info.html",{'book':book,'comments':comments,'person_In':person_In})
 
 def proccess_book(request):
     comment = request.POST['reviews']
@@ -117,9 +130,3 @@ def deletebook(request,id):
 def logout(request):
     request.session.clear()
     return redirect('/')
-
-
-
-
-# def get_query(self):
-#     result =

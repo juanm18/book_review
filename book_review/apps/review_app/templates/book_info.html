@@ -2,30 +2,36 @@
 
 {% block content %}
 <div class="bookInfo">
-  <div class="jumbotron">
-    <h2>Book Title: {{book.title}}</h2>
-    <h3>Author: {{book.author}}</h3>
+  <div class="jumbotron text-center">
+    <h2 class="display-3">Book Title: {{book.title}}</h2>
+    <br>
+    <h3 class="display-4">Author: {{book.author}}</h3>
   </div>
   <br>
-  <div class="col-md-8 px-3">
+  <div class="book_comments">
+  <!-- <div class="col-md-8 px-3"> -->
     <div class="card-block px-3">
       <h3 class="card-title">Reviews:</h3>
+      <hr>
       {% for c in comments %}
       <p class="card-text"><a href='/user/{{c.user.id}}'>{{c.user.user_name}}</a> said: {{c.comment}}</p>
-      <p class="card-text">Rating: {{c.rating}}</p>
+      <strong><p class="card-text">Rating: {{c.rating}}</p></strong>
       {% if c.user.id == request.session.id %}<p><a href='delete/{{c.id}}'>Delete Comment</a></p>{%endif%}
+      <hr>
       {% endfor %}
     </div>
-  </div>
+  <!-- </div> -->
+</div>
   <br>
-  <div class="col-xs-12 col-sm-6 col-lg-4">
+  <div class="myReview">
+  <!-- <div class="col-xs-12 col-sm-6 col-lg-4"> -->
     <div class="box">
       <div class="info">
         <h3 class="title">What did you think about this Book?</h3>
         <form class="addrev" action='/proccess_book' method="post">
           {% csrf_token %}
           <input type="hidden" name="book_id" value="{{book.id}}">
-          <p>Add Review:<textarea name="reviews" rows="4" cols="40"></textarea></p>
+          <p>Add Review: <textarea name="reviews" rows="4" cols="40"></textarea></p>
           <p>Rating:
           <select name="rating">
             <option value="1">1</option>
@@ -40,7 +46,8 @@
         </form>
       </div>
     </div>
-  </div>
+  <!-- </div> -->
+</div>
   <div class="space"></div>
 </div>
 {% endblock content%}

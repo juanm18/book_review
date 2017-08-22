@@ -1,22 +1,24 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="page-header">
-  <h1>This Is The Users Page<small></small></h1>
+<div class="jumbotron text-center">
+  <h1 class="display-3">Welcome to {{user.first_name}}'s profile</h1>
 </div>
 <br>
 <div class="User">
   <div class="card-block px-3">
-   <p class="card-text"><h3>Name: {{user.first_name}}</h3></p>
-   <p class="card-text"><h3>Username: {{user.user_name}}</h3></p>
-   <p class="card-text"><h3>Email: {{user.email}}</h3></p>
-   <p class="card-text"><h3>Total Reviews: {{revcount}}</h3></p>
+   <p class="card-text"><h4>Name: {{user.first_name}}</h4></p>
+   <p class="card-text"><h4>Username: {{user.user_name}}</h4></p>
+   <p class="card-text"><h4>Email: {{user.email}}</h4></p>
+   <p class="card-text"><h4>Total Reviews: {{revcount}}</h4></p>
    <p class="card-text"></p>
  </div>
  <br>
-  <h3>Other Books Reviewed by {{user.first_name}}:</h3>
+ <div class="user_reviews">
+  <h3>Books Reviewed by {{user.first_name}}:</h3>
   {% for m in mybooks %}
-  <li><a href='/book/{{m.book.id}}'>{{m.book.title}}</a></li>
+  <li><h3><a href='/book/{{m.id}}'>{{m.title}}</a></h3></li>
   {%endfor%}
+</div>
 </div>
 {% endblock content %}
